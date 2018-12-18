@@ -1,20 +1,1012 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Astral by HTML5 UP</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	</head>
-	<body>
-		<h3>JavaDoc links:</h3>
-		<ul>
-		<li><a href="./olca-core/apidocs/index.html">olca-core</a>
-		<li><a href="./olca-ecospold-1/apidocs/index.html">olca-ecospold-1</a>
-		<li><a href="./olca-ecospold-2/apidocs/index.html">olca-ecospold-2</a>
-		<li><a href="./olca-eigen/apidocs/index.html">olca-eigen</a>
-		<li><a href="./olca-formula/apidocs/index.html">olca-formula</a>
-		<li><a href="./olca-ilcd/apidocs/index.html">olca-ilcd</a>
-		<li><a href="./olca-io/apidocs/index.html">olca-io</a>
-		<li><a href="./olca-simapro-csv/apidocs/index.html">olca-simapro-csv</a>
-		</ul>
-	</body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Michael Srocka" />
+  <title>The openLCA core API</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+    var mathElements = document.getElementsByClassName("math");
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") { katex.render(texText.data, mathElements[i], { displayMode: mathElements[i].classList.contains("display"), throwOnError: false } );
+    }}});</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">The openLCA core API</h1>
+<p class="author">Michael Srocka</p>
+<p class="date">December 2018</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#how-to-read-this-document">How to read this document</a></li>
+<li><a href="#package-org.openlca.core.math">Package: org.openlca.core.math</a><ul>
+<li><a href="#simulator">Simulator</a><ul>
+<li><a href="#simulator-1">Simulator()</a></li>
+<li><a href="#getresult-simulationresult">getResult() : SimulationResult</a></li>
+<li><a href="#nextrun-simpleresult">nextRun() : SimpleResult</a></li>
+<li><a href="#withcontributions-void">withContributions() : void</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#package-org.openlca.core.results">Package: org.openlca.core.results</a><ul>
+<li><a href="#baseresult-iresult">BaseResult &gt; IResult</a><ul>
+<li><a href="#flowindex-flowindex">flowIndex : FlowIndex</a></li>
+<li><a href="#impactindex-dindex">impactIndex : DIndex<ImpactCategoryDescriptor></a></li>
+<li><a href="#techindex-techindex">techIndex : TechIndex</a></li>
+<li><a href="#getflows-setflowdescriptor">getFlows() : Set&lt;FlowDescriptor&gt;</a></li>
+<li><a href="#getimpacts-setimpactcategorydescriptor">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</a></li>
+<li><a href="#getprocesses-setcategorizeddescriptor">getProcesses() : Set&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#getproviders-setprocessproduct">getProviders() : Set&lt;ProcessProduct&gt;</a></li>
+<li><a href="#hasflowresults-boolean">hasFlowResults() : boolean</a></li>
+<li><a href="#hasimpactresults-boolean">hasImpactResults() : boolean</a></li>
+<li><a href="#isinput-boolean">isInput() : boolean</a></li>
+</ul></li>
+<li><a href="#contributionitem">ContributionItem</a><ul>
+<li><a href="#amount-double">amount : double</a></li>
+<li><a href="#item-t">item : T</a></li>
+<li><a href="#rest-boolean">rest : boolean</a></li>
+<li><a href="#share-double">share : double</a></li>
+</ul></li>
+<li><a href="#contributionresult-simpleresult">ContributionResult &gt; SimpleResult</a><ul>
+<li><a href="#directcostresults-double">directCostResults : double[]</a></li>
+<li><a href="#directflowimpacts-imatrix">directFlowImpacts : IMatrix</a></li>
+<li><a href="#directflowresults-imatrix">directFlowResults : IMatrix</a></li>
+<li><a href="#directimpactresults-imatrix">directImpactResults : IMatrix</a></li>
+<li><a href="#impactfactors-imatrix">impactFactors : IMatrix</a></li>
+<li><a href="#getdirectcostresult-double">getDirectCostResult() : double</a></li>
+<li><a href="#getdirectcostresult-double-1">getDirectCostResult() : double</a></li>
+<li><a href="#getdirectflowimpact-double">getDirectFlowImpact() : double</a></li>
+<li><a href="#getdirectflowresult-double">getDirectFlowResult() : double</a></li>
+<li><a href="#getdirectflowresult-double-1">getDirectFlowResult() : double</a></li>
+<li><a href="#getdirectimpactresult-double">getDirectImpactResult() : double</a></li>
+<li><a href="#getdirectimpactresult-double-1">getDirectImpactResult() : double</a></li>
+<li><a href="#getflowcontributions-listflowresult">getFlowContributions() : List&lt;FlowResult&gt;</a></li>
+<li><a href="#getflowcontributions-listflowresult-1">getFlowContributions() : List&lt;FlowResult&gt;</a></li>
+<li><a href="#getimpactcontributions-listimpactresult">getImpactContributions() : List&lt;ImpactResult&gt;</a></li>
+<li><a href="#getprocesscontributions-contributionsetcategorizeddescriptor">getProcessContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#getprocesscontributions-contributionsetcategorizeddescriptor-1">getProcessContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#getprocesscostcontributions-contributionsetcategorizeddescriptor">getProcessCostContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#hascostresults-boolean">hasCostResults() : boolean</a></li>
+</ul></li>
+<li><a href="#contributionset">ContributionSet</a><ul>
+<li><a href="#contributionset-1">ContributionSet()</a></li>
+<li><a href="#contributions-listcontributionitem">contributions : List&lt;ContributionItem<T>&gt;</a></li>
+<li><a href="#empty-contributionsett">empty() : ContributionSet&lt;T&gt;</a></li>
+<li><a href="#getcontribution-contributionitemt">getContribution() : ContributionItem&lt;T&gt;</a></li>
+</ul></li>
+<li><a href="#contributions">Contributions</a><ul>
+<li><a href="#calculate-contributionsett">calculate() : ContributionSet&lt;T&gt;</a></li>
+<li><a href="#calculate-contributionsett-1">calculate() : ContributionSet&lt;T&gt;</a></li>
+<li><a href="#calculateshares-void">calculateShares() : void</a></li>
+<li><a href="#sortascending-void">sortAscending() : void</a></li>
+<li><a href="#sortdescending-void">sortDescending() : void</a></li>
+<li><a href="#topwithrest-listcontributionitemt">topWithRest() : List&lt;ContributionItem&lt;T&gt;&gt;</a></li>
+</ul></li>
+<li><a href="#flowresult">FlowResult</a><ul>
+<li><a href="#flow-flowdescriptor">flow : FlowDescriptor</a></li>
+<li><a href="#input-boolean">input : boolean</a></li>
+<li><a href="#value-double">value : double</a></li>
+</ul></li>
+<li><a href="#fullresult-contributionresult">FullResult &gt; ContributionResult</a><ul>
+<li><a href="#loopfactor-double">loopFactor : double</a></li>
+<li><a href="#techmatrix-imatrix">techMatrix : IMatrix</a></li>
+<li><a href="#upstreamcostresults-imatrix">upstreamCostResults : IMatrix</a></li>
+<li><a href="#upstreamflowresults-imatrix">upstreamFlowResults : IMatrix</a></li>
+<li><a href="#upstreamimpactresults-imatrix">upstreamImpactResults : IMatrix</a></li>
+<li><a href="#getaddedvaluetree-upstreamtree">getAddedValueTree() : UpstreamTree</a></li>
+<li><a href="#getcosttree-upstreamtree">getCostTree() : UpstreamTree</a></li>
+<li><a href="#getlinkshare-double">getLinkShare() : double</a></li>
+<li><a href="#gettree-upstreamtree">getTree() : UpstreamTree</a></li>
+<li><a href="#gettree-upstreamtree-1">getTree() : UpstreamTree</a></li>
+<li><a href="#getupstreamcostresult-double">getUpstreamCostResult() : double</a></li>
+<li><a href="#getupstreamcostresult-double-1">getUpstreamCostResult() : double</a></li>
+<li><a href="#getupstreamflowresult-double">getUpstreamFlowResult() : double</a></li>
+<li><a href="#getupstreamflowresult-double-1">getUpstreamFlowResult() : double</a></li>
+<li><a href="#getupstreamflowresults-listflowresult">getUpstreamFlowResults() : List&lt;FlowResult&gt;</a></li>
+<li><a href="#getupstreamimpactresult-double">getUpstreamImpactResult() : double</a></li>
+<li><a href="#getupstreamimpactresult-double-1">getUpstreamImpactResult() : double</a></li>
+<li><a href="#getupstreamimpactresults-listimpactresult">getUpstreamImpactResults() : List&lt;ImpactResult&gt;</a></li>
+</ul></li>
+<li><a href="#groupingcontribution">GroupingContribution</a><ul>
+<li><a href="#groupingcontribution-1">GroupingContribution()</a></li>
+<li><a href="#calculate-contributionsetprocessgrouping">calculate() : ContributionSet&lt;ProcessGrouping&gt;</a></li>
+<li><a href="#calculate-contributionsetprocessgrouping-1">calculate() : ContributionSet&lt;ProcessGrouping&gt;</a></li>
+</ul></li>
+<li><a href="#iresult">IResult</a><ul>
+<li><a href="#getflows-setflowdescriptor-1">getFlows() : Set&lt;FlowDescriptor&gt;</a></li>
+<li><a href="#getimpacts-setimpactcategorydescriptor-1">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</a></li>
+<li><a href="#getprocesses-setcategorizeddescriptor-1">getProcesses() : Set&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#hascostresults-boolean-1">hasCostResults() : boolean</a></li>
+<li><a href="#hasflowresults-boolean-1">hasFlowResults() : boolean</a></li>
+<li><a href="#hasimpactresults-boolean-1">hasImpactResults() : boolean</a></li>
+<li><a href="#isinput-boolean-1">isInput() : boolean</a></li>
+</ul></li>
+<li><a href="#impactresult">ImpactResult</a><ul>
+<li><a href="#impactcategory-impactcategorydescriptor">impactCategory : ImpactCategoryDescriptor</a></li>
+<li><a href="#value-double-1">value : double</a></li>
+</ul></li>
+<li><a href="#locationcontribution">LocationContribution</a><ul>
+<li><a href="#locationcontribution-1">LocationContribution()</a></li>
+<li><a href="#addedvalues-contributionsetlocation">addedValues() : ContributionSet&lt;Location&gt;</a></li>
+<li><a href="#calculate-contributionsetlocation">calculate() : ContributionSet&lt;Location&gt;</a></li>
+<li><a href="#calculate-contributionsetlocation-1">calculate() : ContributionSet&lt;Location&gt;</a></li>
+<li><a href="#netcosts-contributionsetlocation">netCosts() : ContributionSet&lt;Location&gt;</a></li>
+</ul></li>
+<li><a href="#processgrouping">ProcessGrouping</a><ul>
+<li><a href="#name-string">name : String</a></li>
+<li><a href="#processes-list">processes : List<CategorizedDescriptor></a></li>
+<li><a href="#rest-boolean-1">rest : boolean</a></li>
+<li><a href="#applyon-listprocessgrouping">applyOn() : List&lt;ProcessGrouping&gt;</a></li>
+<li><a href="#equals-boolean">equals() : boolean</a></li>
+<li><a href="#hashcode-int">hashCode() : int</a></li>
+</ul></li>
+<li><a href="#projectresult-iresult">ProjectResult &gt; IResult</a><ul>
+<li><a href="#projectresult">ProjectResult()</a></li>
+<li><a href="#cache-entitycache">cache : EntityCache</a></li>
+<li><a href="#addresult-void">addResult() : void</a></li>
+<li><a href="#getcontributions-contributionsetprojectvariant">getContributions() : ContributionSet&lt;ProjectVariant&gt;</a></li>
+<li><a href="#getcontributions-contributionsetprojectvariant-1">getContributions() : ContributionSet&lt;ProjectVariant&gt;</a></li>
+<li><a href="#getflows-setflowdescriptor-2">getFlows() : Set&lt;FlowDescriptor&gt;</a></li>
+<li><a href="#getimpacts-setimpactcategorydescriptor-2">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</a></li>
+<li><a href="#getprocesses-setcategorizeddescriptor-2">getProcesses() : Set&lt;CategorizedDescriptor&gt;</a></li>
+<li><a href="#getresult-contributionresult">getResult() : ContributionResult</a></li>
+<li><a href="#gettotalflowresult-double">getTotalFlowResult() : double</a></li>
+<li><a href="#gettotalflowresults-listflowresult">getTotalFlowResults() : List&lt;FlowResult&gt;</a></li>
+<li><a href="#gettotalimpactresult-double">getTotalImpactResult() : double</a></li>
+<li><a href="#getvariants-setprojectvariant">getVariants() : Set&lt;ProjectVariant&gt;</a></li>
+<li><a href="#hascostresults-boolean-2">hasCostResults() : boolean</a></li>
+<li><a href="#hasflowresults-boolean-2">hasFlowResults() : boolean</a></li>
+<li><a href="#hasimpactresults-boolean-2">hasImpactResults() : boolean</a></li>
+<li><a href="#isinput-boolean-2">isInput() : boolean</a></li>
+</ul></li>
+<li><a href="#simpleresult-baseresult">SimpleResult &gt; BaseResult</a><ul>
+<li><a href="#scalingvector-double">scalingVector : double[]</a></li>
+<li><a href="#totalcosts-double">totalCosts : double</a></li>
+<li><a href="#totalflowresults-double">totalFlowResults : double[]</a></li>
+<li><a href="#totalimpactresults-double">totalImpactResults : double[]</a></li>
+<li><a href="#totalrequirements-double">totalRequirements : double[]</a></li>
+<li><a href="#getscalingfactor-double">getScalingFactor() : double</a></li>
+<li><a href="#getscalingfactor-double-1">getScalingFactor() : double</a></li>
+<li><a href="#gettotalflowresult-double-1">getTotalFlowResult() : double</a></li>
+<li><a href="#gettotalflowresults-listflowresult-1">getTotalFlowResults() : List&lt;FlowResult&gt;</a></li>
+<li><a href="#gettotalimpactresult-double-1">getTotalImpactResult() : double</a></li>
+<li><a href="#gettotalimpactresults-listimpactresult">getTotalImpactResults() : List&lt;ImpactResult&gt;</a></li>
+<li><a href="#hascostresults-boolean-3">hasCostResults() : boolean</a></li>
+</ul></li>
+<li><a href="#simulationresult-baseresult">SimulationResult &gt; BaseResult</a><ul>
+<li><a href="#appendflowresults-void">appendFlowResults() : void</a></li>
+<li><a href="#appendimpactresults-void">appendImpactResults() : void</a></li>
+<li><a href="#getflowresults-listdouble">getFlowResults() : List&lt;Double&gt;[]</a></li>
+<li><a href="#getflowresults-listdouble-1">getFlowResults() : List&lt;Double&gt;</a></li>
+<li><a href="#getimpactresults-listdouble">getImpactResults() : List&lt;Double&gt;[]</a></li>
+<li><a href="#getimpactresults-listdouble-1">getImpactResults() : List&lt;Double&gt;</a></li>
+<li><a href="#getnumberofruns-int">getNumberOfRuns() : int</a></li>
+<li><a href="#hascostresults-boolean-4">hasCostResults() : boolean</a></li>
+<li><a href="#setflowresults-void">setFlowResults() : void</a></li>
+<li><a href="#setimpactresults-void">setImpactResults() : void</a></li>
+</ul></li>
+<li><a href="#simulationstatistics">SimulationStatistics</a><ul>
+<li><a href="#simulationstatistics-1">SimulationStatistics()</a></li>
+<li><a href="#empty-simulationstatistics">empty() : SimulationStatistics</a></li>
+<li><a href="#getabsolutefrequency-int">getAbsoluteFrequency() : int</a></li>
+<li><a href="#getcount-int">getCount() : int</a></li>
+<li><a href="#getinterval-int">getInterval() : int</a></li>
+<li><a href="#getmaximalabsolutefrequency-int">getMaximalAbsoluteFrequency() : int</a></li>
+<li><a href="#getmaximum-double">getMaximum() : double</a></li>
+<li><a href="#getmean-double">getMean() : double</a></li>
+<li><a href="#getmedian-double">getMedian() : double</a></li>
+<li><a href="#getminimum-double">getMinimum() : double</a></li>
+<li><a href="#getpercentilevalue-double">getPercentileValue() : double</a></li>
+<li><a href="#getrange-double">getRange() : double</a></li>
+<li><a href="#getstandarddeviation-double">getStandardDeviation() : double</a></li>
+</ul></li>
+<li><a href="#systemprocess">SystemProcess</a><ul>
+<li><a href="#create-process">create() : Process</a></li>
+<li><a href="#createwithmetadata-process">createWithMetaData() : Process</a></li>
+</ul></li>
+<li><a href="#upstreamnode">UpstreamNode</a><ul>
+<li><a href="#provider-processproduct">provider : ProcessProduct</a></li>
+<li><a href="#result-double">result : double</a></li>
+</ul></li>
+<li><a href="#upstreamtree">UpstreamTree</a><ul>
+<li><a href="#upstreamtree-1">UpstreamTree()</a></li>
+<li><a href="#upstreamtree-2">UpstreamTree()</a></li>
+<li><a href="#ref-basedescriptor">ref : BaseDescriptor</a></li>
+<li><a href="#root-upstreamnode">root : UpstreamNode</a></li>
+<li><a href="#childs-listupstreamnode">childs() : List&lt;UpstreamNode&gt;</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="how-to-read-this-document">How to read this document</h1>
+<p>This document contains the documentation of the openLCA core API, automatically extracted from the Java documentation of the <a href="https://github.com/GreenDelta/olca-modules">olca-modules repository</a> (using the <a href="https://github.com/msrocka/jmd">jmd tool</a>). The headings of this document follow the structure of the API:</p>
+<ol type="1">
+<li>Packages (e.g. <code>org.openlca.core.results</code>)</li>
+<li>Types (mainly classes), e.g. <code>ContributionResult</code></li>
+<li>Fields (e.g. <code>techIndex</code>) and methods (e.g. <code>getFlows()</code>)</li>
+</ol>
+<p>A heading <code>TypeB &gt; TypeA</code> means that the following section is about <code>TypeB</code> which extends <code>TypeA</code> and, thus, has all the methods and fields that <code>TypeA</code> has. The heading <code>fieldC : TypeD</code> means that <code>fieldC</code> is an accessible field (a property) of type <code>TypeD</code>. Finally, a heading <code>methodG(): TypeE</code> means that <code>methodG</code> is a callable method that returns an instance of <code>TypeE</code>. The parameters of that method are directly listed after the heading in the same order as they need to be applied when calling the method. Methods that have the same name as their type (like <code>TypeG()</code>) are constructor methods which create a new instance of that type.</p>
+<p>The openLCA core API is a plain Java API that should run on any Java Virtual Machine (JVM) &gt;= v8. Thus, you could use it from any JVM language like Java, Scala, Kotlin, Clojure, Jython, etc. It is also fully exposed to the openLCA development tools within openLCA (<code>Window &gt; Developer tools &gt; Python</code> within openLCA). The Python scripting environment in openLCA uses <a href="http://www.jython.org/">Jython</a> (a Python implementation that runs on the JVM). The following example shows how the usage of the elements <code>package</code>, <code>type</code>, <code>field</code>, and <code>method</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># import the type &#39;FlowDao&#39; from the package</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># &#39;org.openlca.core.database&#39;</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="im">from</span> org.openlca.core.database <span class="im">import</span> FlowDao</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># create a new instance of &quot;FlowDao&quot; by calling</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co"># its constructor method and passing a database</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co"># instance as parameter</span></a>
+<a class="sourceLine" id="cb1-8" title="8">dao <span class="op">=</span> FlowDao(db)</a>
+<a class="sourceLine" id="cb1-9" title="9"></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co"># get all flows by calling the method &quot;getAll&quot;</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co"># on the instance of the FlowDao type</span></a>
+<a class="sourceLine" id="cb1-12" title="12">flows <span class="op">=</span> dao.getAll()</a>
+<a class="sourceLine" id="cb1-13" title="13"></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="co"># writing the value of the field &quot;name&quot; of the</span></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="co"># first flow to the logger output</span></a>
+<a class="sourceLine" id="cb1-16" title="16">log.info(<span class="st">&quot;Name of the first flow: </span><span class="sc">{}</span><span class="st">&quot;</span>, flows[<span class="dv">0</span>].name)</a></code></pre></div>
+<h1 id="package-org.openlca.core.math">Package: org.openlca.core.math</h1>
+<h2 id="simulator">Simulator</h2>
+<p>A <code>Simulator</code> runs Monte-Carlo simulations with a given calculation setup.</p>
+<h3 id="simulator-1">Simulator()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>setup : CalculationSetup</li>
+<li>cache : MatrixCache</li>
+<li>solver : IMatrixSolver</li>
+</ul>
+<p>Creates a new <code>Simulator</code> instance for the given setup.</p>
+<h3 id="getresult-simulationresult">getResult() : SimulationResult</h3>
+<p>Get the result of the simulation.</p>
+<h3 id="nextrun-simpleresult">nextRun() : SimpleResult</h3>
+<p>Generates random numbers and calculates the product system. Returns the simulation result if the calculation in this run finished without errors, otherwise <code>null</code> is returned (e.g. when the resulting matrix was singular). The returned result is appended to the result of the simulator (which you get via <code>getResult()</code>, so it does not need to be cached.</p>
+<p>When the flag <code>withContributions</code> is set to true, the returned result will be an instance of <code>ContributionResult</code>.</p>
+<h3 id="withcontributions-void">withContributions() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>b : boolean</li>
+</ul>
+<p>When set to <code>true</code>, the result of each simulation will be a <code>ContributionResult</code>.</p>
+<h1 id="package-org.openlca.core.results">Package: org.openlca.core.results</h1>
+<h2 id="baseresult-iresult">BaseResult &gt; IResult</h2>
+<p><code>BaseResult</code> is a common (abstract) super class of different result implementations. It mainly contains the indices that map objects from the database to the rows and columns of the result matrices.</p>
+<h3 id="flowindex-flowindex">flowIndex : FlowIndex</h3>
+<p>The row index <span class="math inline">\mathit{Idx}_B</span> of the intervention matrix <span class="math inline">\mathbf{B}</span>. It maps the (elementary) flows <span class="math inline">\mathit{F}</span> of the processes in the product system to the <span class="math inline">k</span> rows of <span class="math inline">\mathbf{B}</span>.</p>
+<p><span class="math display">\mathit{Idx}_B: \mathit{F} \mapsto [0 \dots k-1]</span></p>
+<h3 id="impactindex-dindex">impactIndex : DIndex<ImpactCategoryDescriptor></h3>
+<p>The row index <span class="math inline">\mathit{Idx}_C</span> of the matrix with the characterization factors <span class="math inline">\mathbf{C}</span>. It maps the LCIA categories <span class="math inline">\mathit{C}</span> to the <span class="math inline">l</span> rows of <span class="math inline">\mathbf{C}</span>.</p>
+<p><span class="math display">\mathit{Idx}_C: \mathit{C} \mapsto [0 \dots l-1]</span></p>
+<h3 id="techindex-techindex">techIndex : TechIndex</h3>
+<p>The index <span class="math inline">\mathit{Idx}_A</span> of the technology matrix <span class="math inline">\mathbf{A}</span>. It maps the process-product pairs (or process-waste pairs) <span class="math inline">\mathit{P}</span> of the product system to the respective <span class="math inline">n</span> rows and columns of <span class="math inline">\mathbf{A}</span>. If the product system contains other product systems as sub-systems, these systems are handled like processes and are also mapped as pair with their quantitative reference flow to that index (and also their processes etc.).</p>
+<p><span class="math display">\mathit{Idx}_A: \mathit{P} \mapsto [0 \dots n-1]</span></p>
+<h3 id="getflows-setflowdescriptor">getFlows() : Set&lt;FlowDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getimpacts-setimpactcategorydescriptor">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getprocesses-setcategorizeddescriptor">getProcesses() : Set&lt;CategorizedDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getproviders-setprocessproduct">getProviders() : Set&lt;ProcessProduct&gt;</h3>
+<p>Get the process-product pairs (or process-waste pairs) <span class="math inline">\mathit{P}</span> of the product system. If the product system contains other product systems as sub-systems, these systems are handled like processes and are also included as pairs with their quantitative reference flow.</p>
+<h3 id="hasflowresults-boolean">hasFlowResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="hasimpactresults-boolean">hasImpactResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="isinput-boolean">isInput() : boolean</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p><em>Overridden method of supertype.</em></p>
+<h2 id="contributionitem">ContributionItem</h2>
+<p><em>undocumented</em></p>
+<h3 id="amount-double">amount : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="item-t">item : T</h3>
+<p><em>undocumented</em></p>
+<h3 id="rest-boolean">rest : boolean</h3>
+<p><em>undocumented</em></p>
+<h3 id="share-double">share : double</h3>
+<p><em>undocumented</em></p>
+<h2 id="contributionresult-simpleresult">ContributionResult &gt; SimpleResult</h2>
+<p>The <code>ContributionResult</code> extends the <code>SimpleResult</code> type. It also contains all direct contributions of the processes to the LCI and LCIA results. Additionally, it contains the contributions of the (elementary) flows to the LCIA results.</p>
+<h3 id="directcostresults-double">directCostResults : double[]</h3>
+<p>Contains the direct contributions <span class="math inline">\mathbf{k}_s</span> of the process-product pairs to the total net-costs (<span class="math inline">\odot</span> denotes element-wise multiplication):</p>
+<p><span class="math display">\mathbf{k}_s = \mathbf{k} \odot \mathbf{s}</span></p>
+<h3 id="directflowimpacts-imatrix">directFlowImpacts : IMatrix</h3>
+<p>A LCIA category * flow matrix that contains the direct contributions of the elementary flows to the LCIA result. This matrix can be calculated by column-wise scaling of the matrix with the characterization factors <span class="math inline">\mathbf{C}</span> with the inventory result <span class="math inline">\mathbf{g}</span>:</p>
+<p><span class="math display">\mathbf{H} = \mathbf{C} \ \text{diag}(\mathbf{g})</span></p>
+<h3 id="directflowresults-imatrix">directFlowResults : IMatrix</h3>
+<p>An elementary flow * process-product matrix that contains the direct contributions of the processes to the inventory result. This can be calculated by column-wise scaling of the intervention matrix <span class="math inline">\mathbf{B}</span> with the scaling vector <span class="math inline">\mathbf{s}</span>:</p>
+<p><span class="math display">\mathbf{G} = \mathbf{B} \ \text{diag}(\mathbf{s})</span></p>
+<h3 id="directimpactresults-imatrix">directImpactResults : IMatrix</h3>
+<p>A LCIA category * process-product matrix that contains the direct contributions of the processes to the LCIA result. This can be calculated by a matrix-matrix multiplication of the direct inventory contributions <span class="math inline">\mathbf{G}</span> with the matrix with the characterization factors <span class="math inline">\mathbf{C}</span>:</p>
+<p><span class="math display">\mathbf{D} = \mathbf{C} \ \mathbf{G}</span></p>
+<h3 id="impactfactors-imatrix">impactFactors : IMatrix</h3>
+<p>A LCIA category * flow matrix <span class="math inline">\mathbf{C}</span> the contains the characterization factors.</p>
+<h3 id="getdirectcostresult-double">getDirectCostResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+</ul>
+<p>Get the direct contribution of the given process-product pair <span class="math inline">j</span> to the LCC result: <span class="math inline">\mathbf{k}_s[j]</span>.</p>
+<h3 id="getdirectcostresult-double-1">getDirectCostResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given process <span class="math inline">j</span> to the LCC result. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getdirectflowimpact-double">getDirectFlowImpact() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given elementary flow to the LCIA result of the given LCIA category.</p>
+<h3 id="getdirectflowresult-double">getDirectFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given process-product pair <span class="math inline">j</span> to the inventory result of elementary flow <span class="math inline">i</span>: <span class="math inline">\mathbf{G}[i,j]</span>.</p>
+<h3 id="getdirectflowresult-double-1">getDirectFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given process <span class="math inline">j</span> to the inventory result of elementary flow <span class="math inline">i</span>. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getdirectimpactresult-double">getDirectImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given process-product pair <span class="math inline">j</span> to the LCIA category result <span class="math inline">j</span>: <span class="math inline">\mathbf{D}[i,j]</span>.</p>
+<h3 id="getdirectimpactresult-double-1">getDirectImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the direct contribution of the given process <span class="math inline">j</span> to the LCIA category result <span class="math inline">i</span>. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getflowcontributions-listflowresult">getFlowContributions() : List&lt;FlowResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the direct contributions of the given process <span class="math inline">j</span> to the inventory result of all elementary flows in the product system.</p>
+<h3 id="getflowcontributions-listflowresult-1">getFlowContributions() : List&lt;FlowResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the contributions of all elementary flows to the given LCA category.</p>
+<h3 id="getimpactcontributions-listimpactresult">getImpactContributions() : List&lt;ImpactResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategoryDescriptor</li>
+</ul>
+<p>Get the direct contributions of the given process <span class="math inline">j</span> to the LCIA category results.</p>
+<h3 id="getprocesscontributions-contributionsetcategorizeddescriptor">getProcessContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the direct contributions of the processes in the system to the inventory result of the given flow.</p>
+<h3 id="getprocesscontributions-contributionsetcategorizeddescriptor-1">getProcessContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the direct contributions of the processes in the system to the LCIA result of the given LCIA category.</p>
+<h3 id="getprocesscostcontributions-contributionsetcategorizeddescriptor">getProcessCostContributions() : ContributionSet&lt;CategorizedDescriptor&gt;</h3>
+<p>Get the direct contributions of all processes to the LCC result.</p>
+<h3 id="hascostresults-boolean">hasCostResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h2 id="contributionset">ContributionSet</h2>
+<p>A set of contributions to an overall result.</p>
+<h3 id="contributionset-1">ContributionSet()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>contributions : List&lt;ContributionItem<T>&gt;</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="contributions-listcontributionitem">contributions : List&lt;ContributionItem<T>&gt;</h3>
+<p><em>undocumented</em></p>
+<h3 id="empty-contributionsett">empty() : ContributionSet&lt;T&gt;</h3>
+<p><em>undocumented</em></p>
+<h3 id="getcontribution-contributionitemt">getContribution() : ContributionItem&lt;T&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>item : T</li>
+</ul>
+<p><em>undocumented</em></p>
+<h2 id="contributions">Contributions</h2>
+<p><em>undocumented</em></p>
+<h3 id="calculate-contributionsett">calculate() : ContributionSet&lt;T&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>items : Collection<T></li>
+<li>totalAmount : double</li>
+<li>fn : ToDoubleFunction<T></li>
+</ul>
+<p>Calculates a contribution set of the given collection of items to the given total amount. The contribution values and shares are calculated with the given amount functions which maps an item to the respective contribution amount of this item: <br> <code> contributionSet = Contributions.calculate(items, item -&gt; amount) </code> The share of the contribution item is calculated via: <br> <code> share = item -&gt; amount / abs(totalAmount) </code> An contribution item is set as the “rest” item (contributionItem.isRest = true) if the item in the collection is null).</p>
+<h3 id="calculate-contributionsett-1">calculate() : ContributionSet&lt;T&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>items : Collection<T></li>
+<li>fn : ToDoubleFunction<T></li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="calculateshares-void">calculateShares() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>contributions : List&lt;? extends ContributionItem&lt;?&gt;&gt;</li>
+</ul>
+<p>Calculates the relative shares of the given contribution items.</p>
+<h3 id="sortascending-void">sortAscending() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>items : List&lt;ContributionItem<T>&gt;</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="sortdescending-void">sortDescending() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>items : List&lt;ContributionItem<T>&gt;</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="topwithrest-listcontributionitemt">topWithRest() : List&lt;ContributionItem&lt;T&gt;&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>items : List&lt;ContributionItem<T>&gt;</li>
+<li>maxItems : int</li>
+</ul>
+<p>Returns the top-contributors of the given list ordered by their contribution values in descending order. If there are more items than the given number (maxItems) a rest-item is created at the bottom of the list which gets the sum of the items not in the list. Thus the returned list has <code>maxItems</code> entries.</p>
+<h2 id="flowresult">FlowResult</h2>
+<p><em>undocumented</em></p>
+<h3 id="flow-flowdescriptor">flow : FlowDescriptor</h3>
+<p><em>undocumented</em></p>
+<h3 id="input-boolean">input : boolean</h3>
+<p><em>undocumented</em></p>
+<h3 id="value-double">value : double</h3>
+<p><em>undocumented</em></p>
+<h2 id="fullresult-contributionresult">FullResult &gt; ContributionResult</h2>
+<p>The <code>FullResult</code> extends the <code>ContributionResult</code>. It contains additionally the upstream contributions to LCI, LCIA, and LCC results where applicable.</p>
+<h3 id="loopfactor-double">loopFactor : double</h3>
+<p>The loop factor <span class="math inline">c_r</span> indicates whether the reference process of the product system is part of a product loop (<span class="math inline">c_r \neq 1</span> when this is the case). It can be calculated via:</p>
+<p><span class="math display">c_r = \frac{\mathbf{s}[r] \mathbf{A}[r,r]}{\mathbf{f}[r]}</span></p>
+<p>Where <span class="math inline">r</span> is the index of the reference product of the system. Some upstream results have to be corrected by <span class="math inline">c_r</span> when <span class="math inline">c_r \neq 1</span> to avoid double counting of these loop contributions.</p>
+<h3 id="techmatrix-imatrix">techMatrix : IMatrix</h3>
+<p>The <em>scaled</em> technology matrix <span class="math inline">\mathbf{A*}</span> of the product system. In this matrix each column <span class="math inline">j</span> is scaled by the respective scaling factor <span class="math inline">\mathbf{s}_j</span>:</p>
+<p><span class="math display">\mathbf{A*} = \mathbf{A} \ \text{diag}(\mathbf{s})</span></p>
+<h3 id="upstreamcostresults-imatrix">upstreamCostResults : IMatrix</h3>
+<p>A row vector the upstream contributions to the LCC result of each process-product pair in the product system.</p>
+<p><span class="math display">\mathbf{k}_u = (\mathbf{k} \ \mathbf{A}^{-1}) \ \text{diag}(c_r \ \mathbf{t})</span></p>
+<p>When the reference process itself is located in a loop the total requirements need to be multiplied with the loop factor <span class="math inline">c_r</span> to avoid double counting of the loop contributions (as they are contained in <span class="math inline">\mathbf{A}^{-1}</span> and <span class="math inline">\mathbf{t}</span>).</p>
+<h3 id="upstreamflowresults-imatrix">upstreamFlowResults : IMatrix</h3>
+<p>An elementary flow * process-product matrix that contains the upstream contributions (including the direct contributions) of the processes to the inventory result. It can be calculated by column-wise scaling of the result of the matrix-matrix multiplication of the intervention matrix <span class="math inline">\mathbf{B}</span> with the inverse of the technology matrix <span class="math inline">\mathbf{A}</span> by the total requirements <span class="math inline">\mathbf{t}</span>:</p>
+<p><span class="math display">\mathbf{U} = (\mathbf{B} \ \mathbf{A}^{-1}) \ \text{diag}(c_r \ \mathbf{t})</span></p>
+<p>When the reference process itself is located in a loop the total requirements need to be multiplied with the loop factor <span class="math inline">c_r</span> to avoid double counting of the loop contributions (as they are contained in <span class="math inline">\mathbf{A}^{-1}</span> and <span class="math inline">\mathbf{t}</span>).</p>
+<h3 id="upstreamimpactresults-imatrix">upstreamImpactResults : IMatrix</h3>
+<p>A LCIA category * process-product matrix that contains the upstream contributions (including the direct contributions) of the processes to the LCIA result. It can be calculated by a matrix-matrix multiplication of the characterization factor matrix <span class="math inline">\mathbf{C}</span> with the upstream results of the elementary flows <span class="math inline">\mathbf{U}</span>:</p>
+<p><span class="math display">\mathbf{V} = \mathbf{C} \ \mathbf{U}</span></p>
+<h3 id="getaddedvaluetree-upstreamtree">getAddedValueTree() : UpstreamTree</h3>
+<p>Calculate the upstream tree for the LCC result as added value.</p>
+<h3 id="getcosttree-upstreamtree">getCostTree() : UpstreamTree</h3>
+<p>Calculate the upstream tree for the LCC result as costs.</p>
+<h3 id="getlinkshare-double">getLinkShare() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>link : ProcessLink</li>
+</ul>
+<p>Get the contribution share of the outgoing process product (provider) to the product input (recipient) of the given link and the calculated product system. The returned share is a value between 0 and 1.</p>
+<h3 id="gettree-upstreamtree">getTree() : UpstreamTree</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Calculate the upstream tree for the given flow.</p>
+<h3 id="gettree-upstreamtree-1">getTree() : UpstreamTree</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Calculate the upstream tree for the given LCIA category.</p>
+<h3 id="getupstreamcostresult-double">getUpstreamCostResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>provider : ProcessProduct</li>
+</ul>
+<p>Get the upstream contribution of the given process-product pair <span class="math inline">j</span> to the LCC result: <span class="math inline">\mathbf{k}_u[j]</span>.</p>
+<h3 id="getupstreamcostresult-double-1">getUpstreamCostResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the upstream contribution of the given process <span class="math inline">j</span> to the LCC result. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getupstreamflowresult-double">getUpstreamFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the upstream contribution of the given process-product pair <span class="math inline">j</span> to the inventory result of elementary flow <span class="math inline">i</span>: <span class="math inline">\mathbf{U}[i,j]</span>.</p>
+<h3 id="getupstreamflowresult-double-1">getUpstreamFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the upstream contribution of the given process <span class="math inline">j</span> to the inventory result of elementary flow <span class="math inline">i</span>. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getupstreamflowresults-listflowresult">getUpstreamFlowResults() : List&lt;FlowResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the upstream contributions of the given process <span class="math inline">j</span> to the inventory result of all elementary flows in the product system.</p>
+<h3 id="getupstreamimpactresult-double">getUpstreamImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the upstream contribution of the given process-product pair <span class="math inline">j</span> to the LCIA category result <span class="math inline">j</span>: <span class="math inline">\mathbf{V}[i,j]</span>.</p>
+<h3 id="getupstreamimpactresult-double-1">getUpstreamImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Get the upstream contribution of the given process <span class="math inline">j</span> to the LCIA category result <span class="math inline">i</span>. When the process has multiple products it is the sum of the contributions of all of these process-product pairs.</p>
+<h3 id="getupstreamimpactresults-listimpactresult">getUpstreamImpactResults() : List&lt;ImpactResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the upstream contributions of the given process <span class="math inline">j</span> to the LCIA category results.</p>
+<h2 id="groupingcontribution">GroupingContribution</h2>
+<p>Calculates the contributions of single process results grouped by a given grouping set.</p>
+<h3 id="groupingcontribution-1">GroupingContribution()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>result : ContributionResult</li>
+<li>groupings : List<ProcessGrouping></li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="calculate-contributionsetprocessgrouping">calculate() : ContributionSet&lt;ProcessGrouping&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Calculates contributions to an inventory flow.</p>
+<h3 id="calculate-contributionsetprocessgrouping-1">calculate() : ContributionSet&lt;ProcessGrouping&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Calculates contributions to an impact assessment method.</p>
+<h2 id="iresult">IResult</h2>
+<p>The common protocol of all result types.</p>
+<h3 id="getflows-setflowdescriptor-1">getFlows() : Set&lt;FlowDescriptor&gt;</h3>
+<p>Get the (elementary) flows of the inventory model.</p>
+<h3 id="getimpacts-setimpactcategorydescriptor-1">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</h3>
+<p>Get the LCIA categories of the LCIA result.</p>
+<h3 id="getprocesses-setcategorizeddescriptor-1">getProcesses() : Set&lt;CategorizedDescriptor&gt;</h3>
+<p>Get the descriptors of the processes of the inventory model. If a product system contains other product systems, these sub-systems are also handled like processes and returned.</p>
+<h3 id="hascostresults-boolean-1">hasCostResults() : boolean</h3>
+<p>Returns true when this result contains LCC results.</p>
+<h3 id="hasflowresults-boolean-1">hasFlowResults() : boolean</h3>
+<p>Returns true when this result contains (elementary) flow results.</p>
+<h3 id="hasimpactresults-boolean-1">hasImpactResults() : boolean</h3>
+<p>Returns true when this result contains LCIA results.</p>
+<h3 id="isinput-boolean-1">isInput() : boolean</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Returns true when the given flow is handled as an input flow in the inventory model.</p>
+<h2 id="impactresult">ImpactResult</h2>
+<p><em>undocumented</em></p>
+<h3 id="impactcategory-impactcategorydescriptor">impactCategory : ImpactCategoryDescriptor</h3>
+<p><em>undocumented</em></p>
+<h3 id="value-double-1">value : double</h3>
+<p><em>undocumented</em></p>
+<h2 id="locationcontribution">LocationContribution</h2>
+<p>Calculates the contributions of the single process results in an analysis result grouped by their locations.</p>
+<h3 id="locationcontribution-1">LocationContribution()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>result : ContributionResult</li>
+<li>cache : EntityCache</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="addedvalues-contributionsetlocation">addedValues() : ContributionSet&lt;Location&gt;</h3>
+<p>Calculates added values aggregated by location.</p>
+<h3 id="calculate-contributionsetlocation">calculate() : ContributionSet&lt;Location&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Calculates contributions to an inventory flow.</p>
+<h3 id="calculate-contributionsetlocation-1">calculate() : ContributionSet&lt;Location&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Calculates contributions to an impact category.</p>
+<h3 id="netcosts-contributionsetlocation">netCosts() : ContributionSet&lt;Location&gt;</h3>
+<p>Calculates net-costs aggregated by location.</p>
+<h2 id="processgrouping">ProcessGrouping</h2>
+<p>A group of processes for result analysis. If this group is tagged as rest it contains all processes that are not assigned to other groups.</p>
+<h3 id="name-string">name : String</h3>
+<p><em>undocumented</em></p>
+<h3 id="processes-list">processes : List<CategorizedDescriptor></h3>
+<p><em>undocumented</em></p>
+<h3 id="rest-boolean-1">rest : boolean</h3>
+<p><em>undocumented</em></p>
+<h3 id="applyon-listprocessgrouping">applyOn() : List&lt;ProcessGrouping&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>processes : Collection<CategorizedDescriptor></li>
+<li>groupSet : ProcessGroupSet</li>
+<li>restName : String</li>
+</ul>
+<p>Applies the given group set on the given processes. If there are processes not assignable to a group of the group set a group with these processes is created using the given parameter restName.</p>
+<h3 id="equals-boolean">equals() : boolean</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>obj : Object</li>
+</ul>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="hashcode-int">hashCode() : int</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h2 id="projectresult-iresult">ProjectResult &gt; IResult</h2>
+<p>A project result is a wrapper for the inventory results of the respective project variants.</p>
+<h3 id="projectresult">ProjectResult()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>cache : EntityCache</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="cache-entitycache">cache : EntityCache</h3>
+<p><em>undocumented</em></p>
+<h3 id="addresult-void">addResult() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>variant : ProjectVariant</li>
+<li>result : ContributionResult</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getcontributions-contributionsetprojectvariant">getContributions() : ContributionSet&lt;ProjectVariant&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getcontributions-contributionsetprojectvariant-1">getContributions() : ContributionSet&lt;ProjectVariant&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getflows-setflowdescriptor-2">getFlows() : Set&lt;FlowDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getimpacts-setimpactcategorydescriptor-2">getImpacts() : Set&lt;ImpactCategoryDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getprocesses-setcategorizeddescriptor-2">getProcesses() : Set&lt;CategorizedDescriptor&gt;</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="getresult-contributionresult">getResult() : ContributionResult</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>variant : ProjectVariant</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="gettotalflowresult-double">getTotalFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>variant : ProjectVariant</li>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="gettotalflowresults-listflowresult">getTotalFlowResults() : List&lt;FlowResult&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>variant : ProjectVariant</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="gettotalimpactresult-double">getTotalImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>variant : ProjectVariant</li>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getvariants-setprojectvariant">getVariants() : Set&lt;ProjectVariant&gt;</h3>
+<p><em>undocumented</em></p>
+<h3 id="hascostresults-boolean-2">hasCostResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="hasflowresults-boolean-2">hasFlowResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="hasimpactresults-boolean-2">hasImpactResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="isinput-boolean-2">isInput() : boolean</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p><em>Overridden method of supertype.</em></p>
+<h2 id="simpleresult-baseresult">SimpleResult &gt; BaseResult</h2>
+<p>The simplest kind of result of a calculated product system. This result type is particularly suitable for Monte Carlo simulations or other quick calculations.</p>
+<h3 id="scalingvector-double">scalingVector : double[]</h3>
+<p>The scaling vector <span class="math inline">\mathbf{s}</span> which is calculated by solving the equation</p>
+<p><span class="math display">\mathbf{A} \ \mathbf{s} = \mathbf{f}</span></p>
+<p>where <span class="math inline">\mathbf{A}</span> is the technology matrix and <span class="math inline">\mathbf{f}</span> the final demand vector of the product system.</p>
+<h3 id="totalcosts-double">totalCosts : double</h3>
+<p>The total net-costs <span class="math inline">k_t</span> of the LCC result:</p>
+<p><span class="math display">k_t = \mathbf{k} \cdot \mathbf{s}</span></p>
+<p>Where <span class="math inline">\mathbf{k}_j</span> are the net-costs of process <span class="math inline">j</span> and <span class="math inline">\mathbf{s}_j</span> is the scaling factor of that process.</p>
+<h3 id="totalflowresults-double">totalFlowResults : double[]</h3>
+<p>The inventory result <span class="math inline">\mathbf{g}</span> of a product system:</p>
+<p><span class="math display">\mathbf{g} = \mathbf{B} \ \mathbf{s}</span></p>
+<p>Where <span class="math inline">\mathbf{B}</span> is the intervention matrix and <span class="math inline">\mathbf{s}</span> the scaling vector. Note that inputs have negative values in this vector.</p>
+<h3 id="totalimpactresults-double">totalImpactResults : double[]</h3>
+<p>The LCIA result <span class="math inline">\mathbf{h}</span> of a product system:</p>
+<p><span class="math display">\mathbf{h} = \mathbf{C} \ \mathbf{g}</span></p>
+<p>Where <span class="math inline">\mathbf{C}</span> is a flow * LCIA category matrix with the characterization factors and <span class="math inline">\mathbf{g}</span> the inventory result.</p>
+<h3 id="totalrequirements-double">totalRequirements : double[]</h3>
+<p>The total requirements of the products to fulfill the demand of the product system. As our technology matrix <span class="math inline">\mathbf{A}</span> is indexed symmetrically (means rows and columns refer to the same process-product pair) our product amounts are on the diagonal of the technology matrix <span class="math inline">\mathbf{A}</span> and the total requirements can be calculated by the following equation where <span class="math inline">\mathbf{s}</span> is the scaling vector (<span class="math inline">\odot</span> denotes element-wise multiplication):</p>
+<p><span class="math display">\mathbf{t} = \text{diag}(\mathbf{A}) \odot \mathbf{s}</span></p>
+<h3 id="getscalingfactor-double">getScalingFactor() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>product : ProcessProduct</li>
+</ul>
+<p>Get the scaling factor <span class="math inline">\mathbf{s}_j</span> of the given process-product pair <span class="math inline">j</span>.</p>
+<h3 id="getscalingfactor-double-1">getScalingFactor() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>process : CategorizedDescriptor</li>
+</ul>
+<p>Get the scaling factor <span class="math inline">\mathbf{s}_j</span> of the given process <span class="math inline">j</span>. When the process has multiple products in the system it returns the sum of the scaling factors of all of these process-product pairs.</p>
+<h3 id="gettotalflowresult-double-1">getTotalFlowResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p>Get the total inventory result <span class="math inline">\mathbf{g}_i</span> of the given flow <span class="math inline">i</span>.</p>
+<h3 id="gettotalflowresults-listflowresult-1">getTotalFlowResults() : List&lt;FlowResult&gt;</h3>
+<p>Returns the flow results of the inventory result <span class="math inline">\mathbf{g}</span>.</p>
+<h3 id="gettotalimpactresult-double-1">getTotalImpactResult() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p>Returns the total LCIA result <span class="math inline">\mathbf{h}_i</span> of the given LCIA category <span class="math inline">i</span>.</p>
+<h3 id="gettotalimpactresults-listimpactresult">getTotalImpactResults() : List&lt;ImpactResult&gt;</h3>
+<p>Returns the impact category results for the given result.</p>
+<h3 id="hascostresults-boolean-3">hasCostResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h2 id="simulationresult-baseresult">SimulationResult &gt; BaseResult</h2>
+<p>The results of a Monte-Carlo-Simulation. The single result values of the simulation runs are stored in an array of lists where the flow- and LCIA category indices are mapped to the respective array rows and the result values to the respective list entries.</p>
+<h3 id="appendflowresults-void">appendFlowResults() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>vector : double[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="appendimpactresults-void">appendImpactResults() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>vector : double[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getflowresults-listdouble">getFlowResults() : List&lt;Double&gt;[]</h3>
+<p><em>undocumented</em></p>
+<h3 id="getflowresults-listdouble-1">getFlowResults() : List&lt;Double&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flow : FlowDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getimpactresults-listdouble">getImpactResults() : List&lt;Double&gt;[]</h3>
+<p><em>undocumented</em></p>
+<h3 id="getimpactresults-listdouble-1">getImpactResults() : List&lt;Double&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impact : ImpactCategoryDescriptor</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getnumberofruns-int">getNumberOfRuns() : int</h3>
+<p><em>undocumented</em></p>
+<h3 id="hascostresults-boolean-4">hasCostResults() : boolean</h3>
+<p><em>Overridden method of supertype.</em></p>
+<h3 id="setflowresults-void">setFlowResults() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>flowResults : List<Double>[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="setimpactresults-void">setImpactResults() : void</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>impactResults : List<Double>[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h2 id="simulationstatistics">SimulationStatistics</h2>
+<p>Calculates statistic parameters for a set of numbers.</p>
+<h3 id="simulationstatistics-1">SimulationStatistics()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>values : List<Double></li>
+<li>intervalCount : int</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="empty-simulationstatistics">empty() : SimulationStatistics</h3>
+<p><em>undocumented</em></p>
+<h3 id="getabsolutefrequency-int">getAbsoluteFrequency() : int</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>interval : int</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="getcount-int">getCount() : int</h3>
+<p><em>undocumented</em></p>
+<h3 id="getinterval-int">getInterval() : int</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>value : double</li>
+</ul>
+<p>Get the zero-based index of the interval where the given value is located.</p>
+<h3 id="getmaximalabsolutefrequency-int">getMaximalAbsoluteFrequency() : int</h3>
+<p><em>undocumented</em></p>
+<h3 id="getmaximum-double">getMaximum() : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="getmean-double">getMean() : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="getmedian-double">getMedian() : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="getminimum-double">getMinimum() : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="getpercentilevalue-double">getPercentileValue() : double</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>percentile : int</li>
+</ul>
+<p>Returns the value at the given percentile.</p>
+<p><span class="citation" data-cites="param">@param</span> percentile the percentage value (0..100)</p>
+<h3 id="getrange-double">getRange() : double</h3>
+<p><em>undocumented</em></p>
+<h3 id="getstandarddeviation-double">getStandardDeviation() : double</h3>
+<p><em>undocumented</em></p>
+<h2 id="systemprocess">SystemProcess</h2>
+<p><em>undocumented</em></p>
+<h3 id="create-process">create() : Process</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>database : IDatabase</li>
+<li>setup : CalculationSetup</li>
+<li>result : SimpleResult</li>
+<li>name : String</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="createwithmetadata-process">createWithMetaData() : Process</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>database : IDatabase</li>
+<li>setup : CalculationSetup</li>
+<li>result : SimpleResult</li>
+<li>name : String</li>
+</ul>
+<p><em>undocumented</em></p>
+<h2 id="upstreamnode">UpstreamNode</h2>
+<p>Describes a node in an upstream tree.</p>
+<h3 id="provider-processproduct">provider : ProcessProduct</h3>
+<p>A process-flow pair which is a product output or waste input that describes a process in the upstream result tree.</p>
+<h3 id="result-double">result : double</h3>
+<p>The upstream result of this node.</p>
+<h2 id="upstreamtree">UpstreamTree</h2>
+<p>Maps the upstream results of the product system graph to a tree where the root is the reference process of the product system.</p>
+<h3 id="upstreamtree-1">UpstreamTree()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>r : FullResult</li>
+<li>u : double[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="upstreamtree-2">UpstreamTree()</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>ref : BaseDescriptor</li>
+<li>r : FullResult</li>
+<li>u : double[]</li>
+</ul>
+<p><em>undocumented</em></p>
+<h3 id="ref-basedescriptor">ref : BaseDescriptor</h3>
+<p>An optional reference to a model (e.g. flow or LCIA category) to which the upstream tree is related.</p>
+<h3 id="root-upstreamnode">root : UpstreamNode</h3>
+<p><em>undocumented</em></p>
+<h3 id="childs-listupstreamnode">childs() : List&lt;UpstreamNode&gt;</h3>
+<p><em>Parameters:</em></p>
+<ul>
+<li>parent : UpstreamNode</li>
+</ul>
+<p><em>undocumented</em></p>
+</body>
 </html>
