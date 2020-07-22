@@ -29,7 +29,7 @@ public class UpgradeChainTest {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void test() {
 
 		DbUtil u = new DbUtil(db);
 		DbUtil.setVersion(db, 1);
@@ -37,6 +37,25 @@ public class UpgradeChainTest {
 		// these rollbacks are not complete; we just want
 		// to see that each upgrade was executed; also note
 		// that the rollbacks are done in reverse order
+
+		String[] catEntityTables = {
+				"tbl_actors",
+				"tbl_categories",
+				"tbl_currencies",
+				"tbl_dq_systems",
+				"tbl_flows",
+				"tbl_flow_properties",
+				"tbl_impact_categories",
+				"tbl_impact_methods",
+				"tbl_locations",
+				"tbl_parameters",
+				"tbl_processes",
+				"tbl_product_systems",
+				"tbl_projects",
+				"tbl_social_indicators",
+				"tbl_sources",
+				"tbl_unit_groups",
+		};
 
 		// roll back Upgrade9
 		u.dropTable("tbl_parameter_redef_sets");
@@ -48,6 +67,11 @@ public class UpgradeChainTest {
 		u.dropColumn("tbl_impact_factors", "f_location");
 		u.dropColumn("tbl_locations", "geodata");
 		u.dropColumn("tbl_allocation_factors", "formula");
+		u.dropTable("tbl_libraries");
+		for (var table : catEntityTables) {
+			u.dropColumn(table, "tags");
+			u.dropColumn(table, "library");
+		}
 
 		// roll back Upgrade8
 		u.dropColumn("tbl_process_links", "is_system_link");
@@ -133,6 +157,11 @@ public class UpgradeChainTest {
 		assertTrue(u.columnExists("tbl_impact_factors", "f_location"));
 		assertTrue(u.columnExists("tbl_locations", "geodata"));
 		assertTrue(u.columnExists("tbl_allocation_factors", "formula"));
+		assertTrue(u.tableExists("tbl_libraries"));
+		for (var table : catEntityTables) {
+			assertTrue(u.columnExists(table, "tags"));
+			assertTrue(u.columnExists(table, "library"));
+		}
 
 		// finally, check that we now have the current database version
 		assertEquals(IDatabase.CURRENT_VERSION, db.getVersion());

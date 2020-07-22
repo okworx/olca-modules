@@ -2,8 +2,6 @@ package org.openlca.core.matrix;
 
 import java.util.Objects;
 
-import org.openlca.core.model.Flow;
-import org.openlca.core.model.descriptors.Descriptors;
 import org.openlca.core.model.descriptors.FlowDescriptor;
 import org.openlca.core.model.descriptors.LocationDescriptor;
 
@@ -27,6 +25,36 @@ public class IndexFlow {
 	 * Indicates whether the flow is an input flow or not.
 	 */
 	public boolean isInput;
+
+	public static IndexFlow ofInput(FlowDescriptor flow) {
+		var iflow = new IndexFlow();
+		iflow.flow = flow;
+		iflow.isInput = true;
+		return iflow;
+	}
+
+	public static IndexFlow ofInput(FlowDescriptor flow, LocationDescriptor loc) {
+		var iflow = new IndexFlow();
+		iflow.flow = flow;
+		iflow.location = loc;
+		iflow.isInput = true;
+		return iflow;
+	}
+
+	public static IndexFlow ofOutput(FlowDescriptor flow) {
+		var iflow = new IndexFlow();
+		iflow.flow = flow;
+		iflow.isInput = false;
+		return iflow;
+	}
+
+	public static IndexFlow ofOutput(FlowDescriptor flow, LocationDescriptor loc) {
+		var iflow = new IndexFlow();
+		iflow.flow = flow;
+		iflow.location = loc;
+		iflow.isInput = false;
+		return iflow;
+	}
 
 	@Override
 	public boolean equals(Object o) {

@@ -1,9 +1,7 @@
 package org.openlca.core.database.upgrades;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +20,7 @@ class Upgrade9 implements IUpgrade {
 
 	@Override
 	public int[] getInitialVersions() {
-		return new int[] { 8 };
+		return new int[]{8};
 	}
 
 	@Override
@@ -33,6 +31,36 @@ class Upgrade9 implements IUpgrade {
 	@Override
 	public void exec(IDatabase db) {
 		DbUtil u = new DbUtil(db);
+
+		// add new library table
+		u.createTable("tbl_libraries",
+				"CREATE TABLE tbl_libraries (" +
+						" id VARCHAR(255)," +
+						" PRIMARY KEY (id))");
+
+		// add tags and library fields
+		String[] tables = {
+				"tbl_actors",
+				"tbl_categories",
+				"tbl_currencies",
+				"tbl_dq_systems",
+				"tbl_flows",
+				"tbl_flow_properties",
+				"tbl_impact_categories",
+				"tbl_impact_methods",
+				"tbl_locations",
+				"tbl_parameters",
+				"tbl_processes",
+				"tbl_product_systems",
+				"tbl_projects",
+				"tbl_social_indicators",
+				"tbl_sources",
+				"tbl_unit_groups",
+		};
+		for (var table : tables) {
+			u.createColumn(table, "tags VARCHAR(255)");
+			u.createColumn(table, "library VARCHAR(255)");
+		}
 
 		// new regionalization features
 		u.createColumn("tbl_exchanges", "f_location BIGINT");
@@ -75,27 +103,21 @@ class Upgrade9 implements IUpgrade {
 			});
 
 			// 2) move possible parameter redefinitions into parameter sets
-			TLongLongHashMap systemSets = new TLongLongHashMap();
+			var systemSets = new TLongLongHashMap();
 			sql = "select f_owner from tbl_parameter_redefs";
-			try (Connection con = u.db.createConnection();
-					Statement stmt = con.createStatement(
-							ResultSet.TYPE_SCROLL_SENSITIVE,
-							ResultSet.CONCUR_UPDATABLE);
-					ResultSet rs = stmt.executeQuery(sql)) {
-				while (rs.next()) {
-					long owner = rs.getLong(1);
-					if (!systemIDs.contains(owner))
-						continue;
-					long paramSet = systemSets.get(owner);
-					if (paramSet == 0) {
-						paramSet = seq.incrementAndGet();
-						systemSets.put(owner, paramSet);
-					}
-					rs.updateLong(1, paramSet);
-					rs.updateRow();
+			NativeSql.on(u.db).updateRows(sql, rs -> {
+				long owner = rs.getLong(1);
+				if (!systemIDs.contains(owner))
+					return true;
+				long paramSet = systemSets.get(owner);
+				if (paramSet == 0) {
+					paramSet = seq.incrementAndGet();
+					systemSets.put(owner, paramSet);
 				}
-				con.commit();
-			}
+				rs.updateLong(1, paramSet);
+				rs.updateRow();
+				return true;
+			});
 
 			// 3) create the allocated parameter sets
 			TLongLongIterator it = systemSets.iterator();

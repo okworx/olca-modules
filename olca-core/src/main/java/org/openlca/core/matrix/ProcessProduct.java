@@ -1,12 +1,13 @@
 package org.openlca.core.matrix;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.openlca.core.model.Flow;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProductSystem;
 import org.openlca.core.model.descriptors.CategorizedDescriptor;
-import org.openlca.core.model.descriptors.Descriptors;
+import org.openlca.core.model.descriptors.Descriptor;
 import org.openlca.core.model.descriptors.FlowDescriptor;
 import org.openlca.core.model.descriptors.ProcessDescriptor;
 
@@ -49,8 +50,8 @@ public class ProcessProduct {
 	public static ProcessProduct of(
 			Process process,
 			Flow flow) {
-		return of(Descriptors.toDescriptor(process),
-				Descriptors.toDescriptor(flow));
+		return of(Descriptor.of(process),
+				Descriptor.of(flow));
 	}
 
 	/**
@@ -61,8 +62,8 @@ public class ProcessProduct {
 		Flow flow = system.referenceExchange != null
 				? system.referenceExchange.flow
 				: null;
-		return of(Descriptors.toDescriptor(system),
-				Descriptors.toDescriptor(flow));
+		return of(Descriptor.of(system),
+				Descriptor.of(flow));
 	}
 
 	/**
@@ -76,8 +77,8 @@ public class ProcessProduct {
 		var flow = process.quantitativeReference != null
 				? process.quantitativeReference.flow
 				: null;
-		return of(Descriptors.toDescriptor(process),
-				Descriptors.toDescriptor(flow));
+		return of(Descriptor.of(process),
+				Descriptor.of(flow));
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class ProcessProduct {
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ProcessProduct))
 			return false;
-		ProcessProduct other = (ProcessProduct) obj;
+		var other = (ProcessProduct) obj;
 		return Objects.equals(this.process, other.process)
 				&& Objects.equals(this.flow, other.flow);
 	}
@@ -120,4 +121,9 @@ public class ProcessProduct {
 		return null;
 	}
 
+	public Optional<String> getLibrary() {
+		return process == null || process.library == null
+				? Optional.empty()
+				: Optional.of(process.library);
+	}
 }

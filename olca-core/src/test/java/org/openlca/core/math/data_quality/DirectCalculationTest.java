@@ -1,7 +1,6 @@
 package org.openlca.core.math.data_quality;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openlca.core.Tests;
 import org.openlca.core.database.IDatabase;

@@ -16,7 +16,7 @@ import org.openlca.core.model.RootEntity;
 import org.openlca.core.model.Version;
 import org.openlca.core.model.descriptors.CategorizedDescriptor;
 import org.openlca.core.model.descriptors.CategoryDescriptor;
-import org.openlca.core.model.descriptors.Descriptors;
+import org.openlca.core.model.descriptors.Descriptor;
 import org.openlca.util.Categories;
 import org.openlca.util.Strings;
 
@@ -31,16 +31,26 @@ public class CategoryDao
 
 	@Override
 	protected String[] getDescriptorFields() {
-		return new String[] { "id", "ref_id", "name", "description", "version",
-				"last_change", "f_category", "model_type" };
+		return new String[] {
+				"id",
+				"ref_id",
+				"name",
+				"description",
+				"version",
+				"last_change",
+				"f_category",
+				"library",
+				"model_type",
+		};
 	}
 
 	@Override
 	protected CategoryDescriptor createDescriptor(Object[] queryResult) {
-		CategoryDescriptor descriptor = super.createDescriptor(queryResult);
-		if (queryResult[7] instanceof String)
+		var descriptor = super.createDescriptor(queryResult);
+		if (queryResult[8] instanceof String) {
 			descriptor.categoryType = ModelType
-					.valueOf((String) queryResult[7]);
+					.valueOf((String) queryResult[8]);
+		}
 		return descriptor;
 	}
 
@@ -79,7 +89,7 @@ public class CategoryDao
 		Category forRefId = getForRefId(newRefId);
 		boolean isNew = category.id == 0L;
 		if (!Objects.equals(refId, newRefId) && !isNew)
-			getDatabase().notifyDelete(Descriptors.toDescriptor(category));
+			getDatabase().notifyDelete(Descriptor.of(category));
 		if (Objects.equals(refId, newRefId) || forRefId == null) {
 			category.refId = newRefId;
 			category = super.update(category);
